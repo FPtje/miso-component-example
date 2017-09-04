@@ -19,7 +19,7 @@ The `Button` module has its own `Model`, `Action`, `updateModel` and `viewModel`
 
 | Function  | Expected  | Actual |
 | --------- | --------- | ------ |
-| `updateModel` | `Action -> Model -> Effect Action Model` | `PublicActions action -> Action -> Model -> Effect action model` |
+| `updateModel` | `Action -> Model -> Effect Action Model` | `PublicActions action -> Action -> Transition Model action` |
 | `viewModel` | `Model -> View Action` | `PublicActions action -> Model -> View action` |
 
 The `PublicActions action` is defined above in the file. The component decides which actions are interesting for its parent through this data structure. The `ParentActions` record has a field for every such action. This allows the parent to listen to those actions, while not having to bother about the ones that are only meant for the component itself.
