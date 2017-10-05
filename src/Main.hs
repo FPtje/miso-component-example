@@ -8,8 +8,8 @@ import qualified Button
 import Control.Lens hiding (view)
 import Miso
 import Miso.String
-import Miso.Transition
 
+-- The two Button components' Models are embedded in this (the parent's) Model
 data Model
    = Model
      { _mLeftButton  :: !Button.Model
@@ -31,14 +31,14 @@ data Action
 
 main :: IO ()
 main =
-  startApp App
-    { initialAction = NoOp
-    , model         = initialModel
-    , update        = fromTransition . updateModel
-    , view          = viewModel
-    , events        = defaultEvents
-    , subs          = []
-    }
+    startApp App
+      { initialAction = NoOp
+      , model         = initialModel
+      , update        = fromTransition . updateModel
+      , view          = viewModel
+      , events        = defaultEvents
+      , subs          = []
+      }
 
 initialModel :: Model
 initialModel =
@@ -48,7 +48,7 @@ initialModel =
     , _mRightButton = Button.initialModel "+"
     }
 
-updateModel :: Action -> Transition Model Action
+updateModel :: Action -> Transition Action Model ()
 updateModel action = case action of
     LeftButtonAction act -> do
         -- Update the component's model, with whatever side effects it may have

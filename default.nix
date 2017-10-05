@@ -3,8 +3,8 @@ let
   inherit (pkgs.haskell.packages) ghcjsHEAD;
 
   miso-src = pkgs.fetchFromGitHub {
-    rev = "9b6d7484d7e85d3052eac2e2cc4bc482f593bd57";
-    sha256 = "15dkphq878rip1dyi4nbgbzp97jn8v7d2b0iy0ckdxar35v51ywv";
+    sha256 = "1ha0nh9jmy6czlikdb0fay03mir2gyx2dj07lzwfvap7hx7gjb6n";
+    rev = "1593151dd10f26c14dd2cf7cea3489f27a6d8f58";
     owner = "haskell-miso";
     repo = "miso";
   };

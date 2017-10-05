@@ -2,7 +2,7 @@
 {-# LANGUAGE TemplateHaskell   #-}
 
 module Button
-  ( -- Note: No constructors
+  ( -- Note: No constructors are exported
     Model
   , Action
 
@@ -17,7 +17,6 @@ import Control.Lens hiding ( view )
 
 import Miso
 import Miso.String
-import Miso.Transition
 import Control.Monad ( when )
 
 -- Internal state
@@ -37,7 +36,7 @@ makeLenses ''Model
 initialModel :: MisoString -> Model
 initialModel txt =
     Model
-    { _mDownState = False
+    { _mDownState  = False
     , _mText       = txt
     , _mEnterCount = 0
     }
@@ -59,14 +58,14 @@ data Action
    | MouseUp
    deriving (Show, Eq)
 
-
 -- Note the polymorphism in `action`
 -- This `action` will be filled in to become the parent's `Action`
 -- Also note that this is the Transition monad, rather than the Effect monad
+-- See the documentation for the Transition monad in miso's Haddock.
 updateModel
     :: PublicActions action
     -> Action
-    -> Transition Model action
+    -> Transition action Model ()
 updateModel pa action = case action of
     MouseDown -> do
       mDownState .= True
@@ -80,7 +79,7 @@ updateModel pa action = case action of
     MouseUp ->
       mDownState .= False
 
--- Same pattern here
+-- Same pattern as the `update` function
 viewModel :: PublicActions action -> Model -> View action
 viewModel pa m =
     button_
