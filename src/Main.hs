@@ -38,6 +38,7 @@ main =
       , view          = viewModel
       , events        = defaultEvents
       , subs          = []
+      , mountPoint    = Nothing
       }
 
 initialModel :: Model
