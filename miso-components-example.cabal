@@ -1,6 +1,6 @@
-name:                miso-transition-example
+name:                miso-components-example
 version:             0.1.0.0
-synopsis:            Transition example for Miso
+synopsis:            Components example for Miso
 author:              Bas van Dijk, Falco Peijnenburg
 maintainer:          fpeijnenburg@gmail.com
 category:            Web
