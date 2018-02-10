@@ -5,9 +5,11 @@ module Main where
 
 import qualified Button
 
-import Control.Lens hiding (view)
-import Miso
-import Miso.String
+import Control.Lens ( (^.), (+=), (-=), makeLenses, to, zoom )
+import Miso ( App(..), Transition )
+import qualified Miso
+import Miso.Html
+import qualified Miso.String as Miso
 
 -- The two Button components' Models are embedded in this (the parent's) Model
 data Model
@@ -31,12 +33,12 @@ data Action
 
 main :: IO ()
 main =
-    startApp App
+    Miso.startApp App
       { initialAction = NoOp
       , model         = initialModel
-      , update        = fromTransition . updateModel
+      , update        = Miso.fromTransition . updateModel
       , view          = viewModel
-      , events        = defaultEvents
+      , events        = Miso.defaultEvents
       , subs          = []
       , mountPoint    = Nothing
       }
@@ -64,7 +66,7 @@ updateModel action = case action of
     AddOne ->
       mValue += 1
 
-    ManyClicksWarning i -> scheduleIO $ do
+    ManyClicksWarning i -> Miso.scheduleIO $ do
       putStrLn "Ouch! You're clicking over too much!"
       putStrLn $ show i ++ " is way too much for me to handle!"
 
@@ -78,7 +80,7 @@ viewModel :: Model -> View Action
 viewModel m =
     div_ []
     [ Button.viewModel leftButtonPa $ m ^. mLeftButton
-    , text $ m ^. mValue . to show . to ms
+    , text $ m ^. mValue . to show . to Miso.ms
     , Button.viewModel rightButtonPa $ m ^. mRightButton
     ]
 

@@ -13,17 +13,19 @@ module Button
   )
   where
 
-import Control.Lens hiding ( view )
+import Control.Lens ( (^.), (+=), (.=), makeLenses, use )
 
-import Miso
-import Miso.String
+import Data.Monoid ( (<>) )
+import qualified Miso
+import Miso.Html
+import qualified Miso.String as Miso
 import Control.Monad ( when )
 
 -- Internal state
 data Model
    = Model
      { _mDownState  :: !Bool
-     , _mText       :: !MisoString
+     , _mText       :: !Miso.MisoString
      , _mEnterCount :: !Int
      }
      deriving (Eq)
@@ -33,7 +35,7 @@ makeLenses ''Model
 
 -- Demand a button text from above,
 -- use defaults for the rest
-initialModel :: MisoString -> Model
+initialModel :: Miso.MisoString -> Model
 initialModel txt =
     Model
     { _mDownState  = False
@@ -65,7 +67,7 @@ data Action
 updateModel
     :: PublicActions action
     -> Action
-    -> Transition action Model ()
+    -> Miso.Transition action Model ()
 updateModel pa action = case action of
     MouseDown -> do
       mDownState .= True
@@ -74,13 +76,13 @@ updateModel pa action = case action of
       enterCount <- use mEnterCount
 
       when (enterCount == 10) $
-        scheduleIO $ pure $ manyClicks pa enterCount
+        Miso.scheduleIO $ pure $ manyClicks pa enterCount
 
     MouseUp ->
       mDownState .= False
 
 -- Same pattern as the `update` function
-viewModel :: PublicActions action -> Model -> View action
+viewModel :: PublicActions action -> Model -> Miso.View action
 viewModel pa m =
     button_
       [ onClick $ click pa
