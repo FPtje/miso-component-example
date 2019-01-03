@@ -6,6 +6,7 @@ maintainer:          fpeijnenburg@gmail.com
 category:            Web
 build-type:          Simple
 cabal-version:       >=1.10
+license:             OtherLicense
 
 executable main
   main-is:
