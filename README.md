@@ -1,6 +1,6 @@
 # Scalable apps using components
 
-Let's say you've tried out [miso](http://haskell-miso.org/). Awesome! Now you want to make a bigger app, but you probably don't want to have the entire app in *one* big `Model`, *one* huge set of `Action`s and a `view` function larger than the Eiffel tower. You'll want to divide things up in components. Each of those components should:
+Let's say you've tried out [miso](http://haskell-miso.org/). Awesome! Now you want to make a bigger app, but you probably don't want to have the entire app in *one* big `Model`, *one* huge set of `Action`s and a `view` function larger than the Eiffel tower. You'll want to divide things up into components. Each of those components should:
 
 - Be reusable
 - Have its own state (`Model`)
@@ -15,10 +15,10 @@ The `Button` module has its own `Model`, `Action`, `updateModel` and `viewModel`
 
 | Function  | Expected  | Actual |
 | --------- | --------- | ------ |
-| `updateModel` | `Action -> Model -> Transition action Model ()` | `PublicActions action -> Action -> Transition action Model ()` |
-| `viewModel` | `Model -> View Action` | `PublicActions action -> Model -> View action` |
+| `updateModel` | `Action -> Model -> Transition action Model ()` | `Interface action -> Action -> Transition action Model ()` |
+| `viewModel` | `Model -> View Action` | `Interface action -> Model -> View action` |
 
-The `PublicActions action` is defined above in the file. The component decides which actions are interesting for its parent through this data structure. The `ParentActions` record has a field for every such `Action`. This allows the parent to listen to the important actions, while not having to bother with the ones that are only meant for the component itself.
+The `Interface action` is defined above in the file. The component decides which actions are interesting for its parent through this data structure. The `Interface` record has a field for every such `Action`. This allows the parent to listen to the important actions, while not having to bother with the ones that are only meant for the component itself.
 
 ## Running the example
 

@@ -55,10 +55,10 @@ updateModel :: Action -> Transition Action Model ()
 updateModel action = case action of
     LeftButtonAction act -> do
         -- Update the component's model, with whatever side effects it may have
-        zoom mLeftButton $ Button.updateModel leftButtonPa act
+        zoom mLeftButton $ Button.updateModel iLeftButton act
 
     RightButtonAction act -> do
-        zoom mRightButton $ Button.updateModel rightButtonPa act
+        zoom mRightButton $ Button.updateModel iRightButton act
 
     SubtractOne -> do
       mValue -= 1
@@ -79,24 +79,24 @@ updateModel action = case action of
 viewModel :: Model -> View Action
 viewModel m =
     div_ []
-    [ Button.viewModel leftButtonPa $ m ^. mLeftButton
+    [ Button.viewModel iLeftButton $ m ^. mLeftButton
     , text $ m ^. mValue . to show . to Miso.ms
-    , Button.viewModel rightButtonPa $ m ^. mRightButton
+    , Button.viewModel iRightButton $ m ^. mRightButton
     ]
 
--- Filling in the PublicActions values for both buttons
-leftButtonPa :: Button.PublicActions Action
-leftButtonPa =
-    Button.PublicActions
-    { Button.toParent   = LeftButtonAction
+-- Filling in the Interface values for both buttons
+iLeftButton :: Button.Interface Action
+iLeftButton =
+    Button.Interface
+    { Button.passAction = LeftButtonAction
     , Button.click      = SubtractOne
     , Button.manyClicks = ManyClicksWarning
     }
 
-rightButtonPa :: Button.PublicActions Action
-rightButtonPa =
-    Button.PublicActions
-    { Button.toParent   = RightButtonAction
+iRightButton :: Button.Interface Action
+iRightButton =
+    Button.Interface
+    { Button.passAction = RightButtonAction
     , Button.click      = AddOne
     , Button.manyClicks = ManyClicksWarning
     }

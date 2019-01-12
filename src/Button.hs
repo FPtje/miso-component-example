@@ -7,7 +7,7 @@ module Button
   , Action
 
   , initialModel
-  , PublicActions(..)
+  , Interface(..)
   , updateModel
   , viewModel
   )
@@ -45,10 +45,10 @@ initialModel txt =
 
 -- Actions interface
 -- These actions are interesting for the parent
-data PublicActions action
-   = PublicActions
-     { -- toParent to channel Actions back to this component
-       toParent   :: Action -> action
+data Interface action
+   = Interface
+     { -- passAction to channel Actions back to this component
+       passAction :: Action -> action
 
        -- Two events that the parent should do something with
      , click      :: action
@@ -65,7 +65,7 @@ data Action
 -- Also note that this is the Transition monad, rather than the Effect monad
 -- See the documentation for the Transition monad in miso's Haddock.
 updateModel
-    :: PublicActions action
+    :: Interface action
     -> Action
     -> Miso.Transition action Model ()
 updateModel pa action = case action of
@@ -82,12 +82,12 @@ updateModel pa action = case action of
       mDownState .= False
 
 -- Same pattern as the `update` function
-viewModel :: PublicActions action -> Model -> Miso.View action
+viewModel :: Interface action -> Model -> Miso.View action
 viewModel pa m =
     button_
       [ onClick $ click pa
-      , onMouseDown $ toParent pa MouseDown
-      , onMouseUp $ toParent pa MouseUp
+      , onMouseDown $ passAction pa MouseDown
+      , onMouseUp $ passAction pa MouseUp
       ]
       [ if m ^. mDownState
         then text $ "~" <> m ^. mText <> "~"
