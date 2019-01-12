@@ -68,7 +68,7 @@ updateModel
     :: Interface action
     -> Action
     -> Miso.Transition action Model ()
-updateModel pa action = case action of
+updateModel iface action = case action of
     MouseDown -> do
       mDownState .= True
       mEnterCount += 1
@@ -76,18 +76,18 @@ updateModel pa action = case action of
       enterCount <- use mEnterCount
 
       when (enterCount == 10) $
-        Miso.scheduleIO $ pure $ manyClicks pa enterCount
+        Miso.scheduleIO $ pure $ manyClicks iface enterCount
 
     MouseUp ->
       mDownState .= False
 
 -- Same pattern as the `update` function
 viewModel :: Interface action -> Model -> Miso.View action
-viewModel pa m =
+viewModel iface m =
     button_
-      [ onClick $ click pa
-      , onMouseDown $ passAction pa MouseDown
-      , onMouseUp $ passAction pa MouseUp
+      [ onClick $ click iface
+      , onMouseDown $ passAction iface MouseDown
+      , onMouseUp $ passAction iface MouseUp
       ]
       [ if m ^. mDownState
         then text $ "~" <> m ^. mText <> "~"
