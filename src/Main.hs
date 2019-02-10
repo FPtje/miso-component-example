@@ -59,6 +59,13 @@ updateModel action = case action of
 
     RightButtonAction act -> do
         zoom mRightButton $ Button.updateModel iRightButton act
+        -- When not using the lens library, the above function call can be
+        -- implemented as follows:
+
+        -- m <- State.get
+        -- rightButton <-
+        --   lift $ State.execStateT (Button.updateModel iRightButton act) $ _mRightButton m
+        -- State.put $ m { _mRightButton = rightButton }
 
     SubtractOne -> do
       mValue -= 1
