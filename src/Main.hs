@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TypeApplications   #-}
 
 module Main where
 
@@ -10,6 +11,7 @@ import Miso ( App(..), Transition )
 import qualified Miso
 import Miso.Html
 import qualified Miso.String as Miso
+import GHCJS.Types
 
 -- The two Button components' Models are embedded in this (the parent's) Model
 data Model
@@ -73,11 +75,10 @@ updateModel action = case action of
     AddOne ->
       mValue += 1
 
-    ManyClicksWarning i -> Miso.scheduleIO $ do
-      putStrLn "Ouch! You're clicking over too much!"
-      putStrLn $ show i ++ " is way too much for me to handle!"
-
-      pure NoOp
+    ManyClicksWarning i -> Miso.scheduleIO_ $ do
+      -- Using consoleLog because putStrLn doesn't seem to work in ghcjs 8.4
+      Miso.consoleLog $ jsval @Miso.MisoString "Ouch! You're clicking too many times!"
+      Miso.consoleLog $ jsval (Miso.toMisoString i <> " is way too much for me to handle!")
 
     NoOp -> pure ()
 
